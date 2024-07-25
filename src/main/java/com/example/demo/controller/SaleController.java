@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.GenericResponse;
-import com.example.demo.dto.RoleDTO;
-import com.example.demo.dto.SaleDTO;
+import com.example.demo.dto.*;
 import com.example.demo.model.Role;
 import com.example.demo.model.Sale;
 import com.example.demo.service.IRoleService;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sales")
@@ -58,6 +57,50 @@ public class SaleController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/resume")
+    public ResponseEntity<List<ProcedureDTO>> getSaleResume1(){
+        return new ResponseEntity<>(service.callProcedure1(),HttpStatus.OK);
+    }
+
+    @GetMapping("/resume2")
+    public ResponseEntity<List<IProcedureDTO>> getSaleResume2(){
+        return new ResponseEntity<>(service.callProcedure2(),HttpStatus.OK);
+    }
+    @GetMapping("/resume3")
+    public ResponseEntity<List<ProcedureDTO>> getSaleResume3(){
+        return new ResponseEntity<>(service.callProcedure3(),HttpStatus.OK);
+    }
+    @GetMapping("/resume4")
+    public ResponseEntity<Void> getSaleResume4(){
+        service.callProcedure4();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/mostExpensive")
+    public ResponseEntity<SaleDTO> getMostExpensive(){
+        SaleDTO dto = covertToDTO(service.getSaleMontExpensive());
+        return new ResponseEntity<>(dto,HttpStatus.OK);
+    }
+
+    @GetMapping("/bestSeller")
+    public ResponseEntity<String> getBestSeller(){
+        String user = service.getBestSellerPerson();
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+    @GetMapping("/sellerCount")
+    public ResponseEntity<Map<String,Long>> getSellerCount(){
+        Map<String,Long> user= service.getSalesCountBySeller();
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
+
+    @GetMapping("/bestProduct")
+    public ResponseEntity<Map<String,Double>> getBestProduct(){
+        Map<String,Double> product= service.getProductBestSeller();
+        return new ResponseEntity<>(product,HttpStatus.OK);
+    }
+
+
 
     private SaleDTO covertToDTO(Sale obj){
         return modelMapper.map(obj,SaleDTO.class);
