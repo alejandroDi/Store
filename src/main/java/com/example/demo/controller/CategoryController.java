@@ -8,10 +8,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.time.chrono.ChronoZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +75,27 @@ public class CategoryController {
     @GetMapping("/find/name/description")
     public ResponseEntity<List<CategoryDTO>> getNameAndDescriptionService(@RequestParam("name") String name,@RequestParam("description") String description) throws Exception {
         List<CategoryDTO> list = service.getNameAndDescriptionService(name,description).stream().map(this::covertToDTO).toList();
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<CategoryDTO>> findPage(Pageable pageable){
+        Page<CategoryDTO> pageCategoryDTO =  service.findPage(pageable).map(this::covertToDTO);
+        return ResponseEntity.ok(pageCategoryDTO);
+    }
+
+    @GetMapping("/pagination2")
+    public ResponseEntity<Page<CategoryDTO>> findPage2(
+            @RequestParam(name = "p",defaultValue = "0") int page,
+            @RequestParam(name = "s",defaultValue = "3") int size
+    ){
+        Page<CategoryDTO> pageCategoryDTO =  service.findPage(PageRequest.of(page,size)).map(this::covertToDTO);
+        return ResponseEntity.ok(pageCategoryDTO);
+    }
+
+    @GetMapping("/order")
+    public ResponseEntity<List<CategoryDTO>> findAllOrder(@RequestParam(name = "param",defaultValue = "ASC") String param){
+        List<CategoryDTO> list = service.findAllOrder(param).stream().map(this::covertToDTO).toList();
         return ResponseEntity.ok(list);
     }
 
