@@ -75,6 +75,9 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    //video 42 30:00
 
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUserNameFromToken(token);
+        return (username.equalsIgnoreCase(userDetails.getUsername()) && !isTokExpired(token));
+    }
 }
