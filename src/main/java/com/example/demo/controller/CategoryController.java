@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.net.URI;
 import java.time.chrono.ChronoZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -45,10 +46,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<GenericResponse<CategoryDTO>> create(@Valid @RequestBody CategoryDTO dto) throws Exception {
         Category obj = service.save(covertToModel(dto));
-        return ResponseEntity.ok(new GenericResponse<>(201,"succes", Arrays.asList( covertToDTO(obj))));
+        return ResponseEntity.created(URI.create("/categories/" + obj.getIdCategory())).body(new GenericResponse<>(201,"succes", Arrays.asList( covertToDTO(obj))));
     }
     @PutMapping("/{id}")
     public ResponseEntity<CategoryDTO> update(@Valid @RequestBody CategoryDTO dto,@PathVariable("id") Integer id) throws Exception {
+        //dto.setIdCategory(id);
         Category obj = service.update(covertToModel(dto), id);
         return ResponseEntity.ok(covertToDTO(obj));
     }
