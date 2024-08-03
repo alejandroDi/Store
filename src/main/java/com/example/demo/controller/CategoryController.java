@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -31,6 +32,7 @@ public class CategoryController {
     @Qualifier("categoryMapper")
     private final ModelMapper modelMapper;
 
+    @PreAuthorize("@authServiceImpl.hasAccess('readAll')")
     @GetMapping
     public ResponseEntity<List<CategoryDTO>>  readAll() throws Exception {
         List<CategoryDTO> list = service.findAll().stream().map(this::covertToDTO).toList();
