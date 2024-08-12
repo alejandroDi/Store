@@ -89,7 +89,7 @@ public class CategoryControllerTest {
                 .post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CATEGORIADTO_3));
-        //33:07
+
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isCreated())
